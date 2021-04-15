@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+// redux stuff
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+
+// reducer import
+import liveStatsReducer from "./reducers/liveStatsReducer";
+
+// pages
+import { Home, LiveDashboard } from "./pages/index";
+
+// components
+import { Navbar } from "./components/index";
+
+const store = createStore(
+    liveStatsReducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Router>
+            <Provider store={store}>
+                <Navbar></Navbar>
+                <Switch>
+                    <Route exact path="/">
+                        <Home></Home>
+                    </Route>
+                    <Route exact path="/livetrack">
+                        <LiveDashboard></LiveDashboard>
+                    </Route>
+                    <Route exact path="/champions">
+                        <LiveDashboard></LiveDashboard>
+                    </Route>
+                    <Route exact path="/items">
+                        <LiveDashboard></LiveDashboard>
+                    </Route>
+                </Switch>
+            </Provider>
+        </Router>
+    );
 }
 
 export default App;
