@@ -16,7 +16,6 @@ exports.handler = async function (event, context) {
         // console.log(data.data.activePlayer);
 
         const response = JSON.stringify(data.data);
-        console.log(response);
         return { statusCode: 200, body: JSON.stringify(response) };
     } catch (error) {
         console.log(error);
