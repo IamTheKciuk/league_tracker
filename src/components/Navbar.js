@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
-export const Navbar = (props) => {
+const Navbar = (props) => {
     return (
         <Wrapper>
             <div className="nav-center">

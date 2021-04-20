@@ -10,6 +10,7 @@ Variables
     --spacing: 0.1rem;
     --max-width: 1200px;
     --nav-color-main: rgba(32, 13, 143, 0.829);
+    --nav-color-main-2: rgb(54, 36, 160);
     --nav-color-links: rgb(156, 145, 243);
 
     /* fonts */
@@ -56,6 +57,7 @@ h4 {
 /* GLOBAL CLASSES */
 
 .page {
+    background: var(--nav-color-main-2);
     min-height: calc(100vh - 4rem);
 }
 
