@@ -2,11 +2,19 @@ import React from "react";
 import styled from "styled-components";
 
 const ActivePlayerItems = ({ items, allItems }) => {
+    console.log(items);
     let itemsFinal = [{}, {}, {}, {}, {}, {}]; // empty tab to always show 6 items
+    let trinket = {};
 
     // set itemsFinal tab with active items
     for (let i = 0; i < 6; i++) {
+        //if item exists and its not a trinket
         if (items[i]) {
+            if (items[i].slot === 6) {
+                trinket = items[i];
+                continue;
+            }
+
             itemsFinal[items[i].slot] = items[i]; // set item on proper slot
         }
     }
@@ -45,17 +53,64 @@ const ActivePlayerItems = ({ items, allItems }) => {
 
     return (
         <Wrapper>
-            {itemsFinal.map((item, index) => {
-                return (
-                    <div key={index} className="item">
+            <GridWrapper>
+                {itemsFinal.map((item, index) => {
+                    return (
+                        <div key={index} className="item">
+                            <div className="img-wrapper">
+                                {/* if id exists show item image */}
+                                {item.itemID ? (
+                                    <img
+                                        className="item-image"
+                                        src={`http://ddragon.leagueoflegends.com/cdn/11.8.1/img/item/${item.itemID}.png`}
+                                        alt={`item ${item.itemID}`}
+                                        data-index={item.itemID}
+                                        onMouseEnter={(e) =>
+                                            toggleDescription(e, "open")
+                                        }
+                                        onMouseLeave={(e) =>
+                                            toggleDescription(e, "close")
+                                        }
+                                    />
+                                ) : (
+                                    <div className="item-image"></div>
+                                )}
+                            </div>
+                            <div
+                                className={`description ${
+                                    item.itemID && item.itemID
+                                }`}
+                            >
+                                <h5 className="description-title">
+                                    {item.displayName}
+                                </h5>
+                                <div className="description-text">
+                                    {item.itemID && (
+                                        <p
+                                            dangerouslySetInnerHTML={{
+                                                __html:
+                                                    allItems[item.itemID]
+                                                        .description,
+                                            }}
+                                        ></p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+            </GridWrapper>
+
+            <Trinket>
+                {trinket.itemID && (
+                    <div className="item trinket">
                         <div className="img-wrapper">
-                            {/* if id exists show item image */}
-                            {item.itemID ? (
+                            {trinket ? (
                                 <img
                                     className="item-image"
-                                    src={`http://ddragon.leagueoflegends.com/cdn/11.8.1/img/item/${item.itemID}.png`}
-                                    alt={`item ${item.itemID}`}
-                                    data-index={item.itemID}
+                                    src={`http://ddragon.leagueoflegends.com/cdn/11.8.1/img/item/${trinket.itemID}.png`}
+                                    alt={`item ${trinket.itemID}`}
+                                    data-index={trinket.itemID}
                                     onMouseEnter={(e) =>
                                         toggleDescription(e, "open")
                                     }
@@ -69,18 +124,18 @@ const ActivePlayerItems = ({ items, allItems }) => {
                         </div>
                         <div
                             className={`description ${
-                                item.itemID && item.itemID
+                                trinket.itemID && trinket.itemID
                             }`}
                         >
                             <h5 className="description-title">
-                                {item.displayName}
+                                {trinket.displayName}
                             </h5>
                             <div className="description-text">
-                                {item.itemID && (
+                                {trinket.itemID && (
                                     <p
                                         dangerouslySetInnerHTML={{
                                             __html:
-                                                allItems[item.itemID]
+                                                allItems[trinket.itemID]
                                                     .description,
                                         }}
                                     ></p>
@@ -88,18 +143,24 @@ const ActivePlayerItems = ({ items, allItems }) => {
                             </div>
                         </div>
                     </div>
-                );
-            })}
+                )}
+            </Trinket>
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    margin: 5px 0px;
+`;
+
+const GridWrapper = styled.div`
     display: grid;
     column-gap: 20px;
     row-gap: 10px;
-    grid-template-columns: repeat(3, 80px);
-    grid-template-rows: repeat(2, 80px);
+    grid-template-columns: repeat(3, 70px);
+    grid-template-rows: repeat(2, 70px);
 
     .item {
         position: relative;
@@ -146,4 +207,53 @@ const Wrapper = styled.div`
     }
 `;
 
+const Trinket = styled.div`
+    width: 70px;
+    height: 70px;
+    margin-left: 20px;
+
+    .item {
+        position: relative;
+        cursor: help;
+        .img-wrapper {
+            width: 100%;
+            height: 100%;
+
+            .item-image {
+                width: 100%;
+                height: 100%;
+                background: black;
+                border: 2px solid silver;
+            }
+        }
+
+        .description {
+            position: absolute;
+            opacity: 0;
+            top: bottom;
+            left: 0;
+            height: 0px;
+            width: 250px;
+            background: white;
+            z-index: 999;
+            transition: all 0.3s ease;
+
+            overflow: hidden;
+
+            .description-text {
+                width: 100%;
+                height: 100%;
+
+                mainText {
+                    /* background: black; */
+                }
+            }
+        }
+
+        .opened {
+            opacity: 1;
+            height: 60px;
+        }
+    }
+`;
 export default ActivePlayerItems;
